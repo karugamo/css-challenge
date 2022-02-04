@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import styled from 'styled-components'
 import Editor from './Editor'
 
@@ -10,6 +10,17 @@ const cssExample = `.button {
 function App() {
   const [htmlCode, setHtmlCode] = useState<string>(htmlExample)
   const [cssCode, setCssCode] = useState<string>(cssExample)
+
+  const iFrameContent = `    
+    <html>
+      <head>
+        <style>${cssCode}</style>
+      </head>
+      <body>
+        ${htmlCode}
+      </body>
+    </html>
+`
 
   return (
     <Container>
@@ -30,10 +41,7 @@ function App() {
         />
       </LeftPane>
       <RightPane>
-        <Result>
-          <div dangerouslySetInnerHTML={{__html: htmlCode}} />
-          <style>{cssCode}</style>
-        </Result>
+        <ResultIFrame sandbox="" srcDoc={iFrameContent} />
       </RightPane>
     </Container>
   )
@@ -46,8 +54,9 @@ const Container = styled.div`
   height: 100vh;
 `
 
-const Result = styled.div`
+const ResultIFrame = styled.iframe`
   background-color: white;
+  border: none;
   height: 40vh;
   padding: 16px;
   border-radius: 6px;

@@ -23,7 +23,6 @@ export default function Editor(props: EditorProps) {
 
 const Container = styled.div`
   border-radius: 6px;
-  overflow: hidden;
   background-color: #1e1e1e;
   padding: 16px;
   margin: 20px;
