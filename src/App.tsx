@@ -74,7 +74,6 @@ const RightPane = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
   width: 40%;
   margin: 20px;
   padding: 20px;
