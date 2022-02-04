@@ -1,40 +1,74 @@
-import Editor from '@monaco-editor/react'
 import {useState} from 'react'
 import styled from 'styled-components'
+import Editor from './Editor'
+
+const htmlExample = `<button class="button">Click me</button>`
+const cssExample = `.button {
+  border-radius: 8px;
+}`
 
 function App() {
-  const [cssCode, setCssCode] = useState<string | undefined>('')
+  const [htmlCode, setHtmlCode] = useState<string>(htmlExample)
+  const [cssCode, setCssCode] = useState<string>(cssExample)
 
   return (
     <Container>
-      <EditorContainer>
+      <LeftPane>
         <Editor
-          onChange={value => setCssCode(value)}
-          height="90vh"
-          defaultLanguage="css"
-          defaultValue=""
+          onChange={value => {
+            if (value) setHtmlCode(value)
+          }}
+          defaultLanguage="html"
+          defaultValue={htmlExample}
         />
-      </EditorContainer>
-      <ResultContainer>
-        <button className="button">Test</button>
-        <style>{cssCode}</style>
-      </ResultContainer>
+        <Editor
+          onChange={value => {
+            if (value) setCssCode(value)
+          }}
+          defaultLanguage="css"
+          defaultValue={cssExample}
+        />
+      </LeftPane>
+      <RightPane>
+        <Result>
+          <div dangerouslySetInnerHTML={{__html: htmlCode}} />
+          <style>{cssCode}</style>
+        </Result>
+      </RightPane>
     </Container>
   )
 }
 
 const Container = styled.div`
   display: flex;
-  color: #f5f5f5;
   flex-direction: row;
+  background-color: lightsteelblue;
+  height: 100vh;
 `
 
-const EditorContainer = styled.div`
+const Result = styled.div`
+  background-color: white;
+  height: 40vh;
+  padding: 16px;
+  border-radius: 6px;
+`
+
+const LeftPane = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   flex: 1;
 `
 
-const ResultContainer = styled.div`
+const RightPane = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  width: 40%;
+  margin: 20px;
+  padding: 20px;
 `
 
 export default App
