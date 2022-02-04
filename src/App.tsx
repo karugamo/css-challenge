@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import styled from 'styled-components'
 import Editor from './Editor'
+import TargetImage from './TargetImage'
 
 const htmlExample = `<button class="button">Click me</button>`
 const cssExample = `.button {
@@ -38,6 +39,7 @@ function App() {
       </LeftPane>
       <RightPane>
         <ResultIFrame sandbox="" srcDoc={iFrameContent} />
+        <TargetImage />
       </RightPane>
     </Container>
   )
@@ -54,6 +56,7 @@ const ResultIFrame = styled.iframe`
   background-color: white;
   border: none;
   height: 40vh;
+  margin: 20px;
   padding: 16px;
   border-radius: 6px;
 `
@@ -71,8 +74,6 @@ const RightPane = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 40%;
-  margin: 20px;
-  padding: 20px;
 `
 
 export default App
