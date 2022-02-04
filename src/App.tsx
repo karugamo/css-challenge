@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react'
+import {useState} from 'react'
 import styled from 'styled-components'
 import Editor from './Editor'
 
@@ -26,17 +26,13 @@ function App() {
     <Container>
       <LeftPane>
         <Editor
-          onChange={value => {
-            if (value) setHtmlCode(value)
-          }}
-          defaultLanguage="html"
+          onChange={value => setHtmlCode(value)}
+          language="html"
           defaultValue={htmlExample}
         />
         <Editor
-          onChange={value => {
-            if (value) setCssCode(value)
-          }}
-          defaultLanguage="css"
+          onChange={value => setCssCode(value)}
+          language="css"
           defaultValue={cssExample}
         />
       </LeftPane>

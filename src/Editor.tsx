@@ -1,12 +1,19 @@
-import MonarchEditor, {EditorProps} from '@monaco-editor/react'
+import MonacoEditor from '@monaco-editor/react'
 import styled from 'styled-components'
 
-export default function Editor(props: EditorProps) {
+interface EditorProps {
+  language: string
+  onChange(value: string): void
+  defaultValue: string
+}
+
+export default function Editor({language, onChange, defaultValue}: EditorProps) {
   return (
     <Container>
-      <MonarchEditor
+      <MonacoEditor
         height="40vh"
         theme="vs-dark"
+        loading=""
         options={{
           overviewRulerLanes: 0,
           hideCursorInOverviewRuler: true,
@@ -15,10 +22,24 @@ export default function Editor(props: EditorProps) {
             enabled: false,
           },
         }}
-        {...props}
+        onMount={handleEditorDidMount}
+        defaultLanguage={language}
+        onChange={onEditorChange}
+        defaultValue={defaultValue}
       />
     </Container>
   )
+
+  function handleEditorDidMount(editor: any) {
+    const storedValue = localStorage.getItem(language)
+    editor.setValue(storedValue || '')
+    onChange(storedValue || '')
+  }
+
+  function onEditorChange(value: string | undefined, event: any) {
+    if (value) onChange(value)
+    if (language && value) localStorage.setItem(language, value)
+  }
 }
 
 const Container = styled.div`
