@@ -6,6 +6,7 @@ export default function TargetImage() {
   const {getInputProps, getRootProps} = useDropzone({onDrop})
   const [image, setImage] = useState<string | undefined>()
 
+  useKeyboardPaste()
   useRevokeObjectURLS()
 
   return (
@@ -14,6 +15,19 @@ export default function TargetImage() {
       {image && <Image src={image} />}
     </Root>
   )
+
+  function useKeyboardPaste() {
+    useEffect(() => {
+      document.onpaste = event => {
+        const item = event.clipboardData?.items[0]
+
+        if (item?.kind !== 'file') return
+
+        const file = item.getAsFile()
+        if (file) setImage(URL.createObjectURL(file))
+      }
+    }, [])
+  }
 
   function useRevokeObjectURLS() {
     useEffect(() => {
