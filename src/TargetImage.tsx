@@ -12,7 +12,11 @@ export default function TargetImage() {
   return (
     <Root {...getRootProps()}>
       <input {...getInputProps()} />
-      {image && <Image src={image} />}
+      {image ? (
+        <Image src={image} />
+      ) : (
+        <div>Drop an image here, or click to select a file to upload.</div>
+      )}
     </Root>
   )
 
@@ -52,4 +56,7 @@ const Root = styled.div`
   padding: 16px;
   margin: 20px;
   border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
