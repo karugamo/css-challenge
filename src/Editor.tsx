@@ -1,13 +1,21 @@
-import MonacoEditor from '@monaco-editor/react'
+import MonacoEditor, {Monaco} from '@monaco-editor/react'
 import styled from 'styled-components'
 
 interface EditorProps {
   language: string
   onChange(value: string): void
   defaultValue: string
+  levelId: string
 }
 
-export default function Editor({language, onChange, defaultValue}: EditorProps) {
+export default function Editor({
+  language,
+  onChange,
+  defaultValue,
+  levelId,
+}: EditorProps) {
+  const storageKey = `editor-${levelId}-${language}`
+
   return (
     <Container>
       <MonacoEditor
@@ -31,14 +39,17 @@ export default function Editor({language, onChange, defaultValue}: EditorProps) 
   )
 
   function handleEditorDidMount(editor: any) {
-    const storedValue = localStorage.getItem(language)
+    const storedValue = localStorage.getItem(storageKey)
+    if (storedValue === null) return
     editor.setValue(storedValue || '')
     onChange(storedValue || '')
   }
 
-  function onEditorChange(value: string | undefined, event: any) {
-    if (value) onChange(value)
-    if (language && value) localStorage.setItem(language, value)
+  function onEditorChange(value: string | undefined) {
+    if (value) {
+      onChange(value)
+      localStorage.setItem(storageKey, value)
+    }
   }
 }
 
