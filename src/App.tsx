@@ -12,6 +12,8 @@ function App() {
   const [htmlCode, setHtmlCode] = useState<string>(challenge.html)
   const [cssCode, setCssCode] = useState<string>(challenge.css)
 
+  useRouter()
+
   const iFrameContent = `    
     <html style="height: 100%;">
       <head>
@@ -61,6 +63,19 @@ function App() {
       </Bottom>
     </Container>
   )
+
+  function useRouter() {
+    useEffect(() => {
+      const hash = window.location.hash.slice(1)
+      if (challenges.find(c => c.id === hash)) {
+        setChallengeIndex(challenges.findIndex(c => c.id === hash))
+      }
+    }, [])
+
+    useEffect(() => {
+      window.location.hash = challenge.id
+    }, [challengeIndex])
+  }
 
   function goToNextChallenge() {
     setChallengeIndex(challengeIndex + 1)
