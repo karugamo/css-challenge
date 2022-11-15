@@ -1,12 +1,16 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import Editor from './Editor'
 import TargetImage from './TargetImage'
-import _challenge from '../challenges/twitter.json'
 
-const challenge = _challenge as Challenge
+import twitter from '../challenges/twitter.json'
+import tags from '../challenges/tags.json'
+
+const challenges: Challenge[] = [twitter, tags]
 
 function App() {
+  const [challengeIndex, setChallengeIndex] = useState<number>(0)
+  const challenge = challenges[challengeIndex]
   const [htmlCode, setHtmlCode] = useState<string>(challenge.html)
   const [cssCode, setCssCode] = useState<string>(challenge.css)
 
@@ -23,39 +27,92 @@ function App() {
 
   return (
     <Container>
-      <LeftPane>
-        <Editor
-          onChange={value => setHtmlCode(value)}
-          language="html"
-          levelId={challenge.id}
-          defaultValue={htmlCode}
-        />
-        <Editor
-          onChange={value => setCssCode(value)}
-          language="css"
-          levelId={challenge.id}
-          defaultValue={cssCode}
-        />
-      </LeftPane>
-      <RightPane>
-        <ResultIFrame sandbox="" srcDoc={iFrameContent} />
-        <TargetImage image={challenge.image} />
-      </RightPane>
+      <Grid>
+        <LeftPane>
+          <Editor
+            onChange={value => setHtmlCode(value)}
+            language="html"
+            levelId={challenge.id}
+            defaultValue={challenge.html}
+          />
+          <Editor
+            onChange={value => setCssCode(value)}
+            language="css"
+            levelId={challenge.id}
+            defaultValue={challenge.css}
+          />
+        </LeftPane>
+        <RightPane>
+          <ResultIFrame sandbox="" srcDoc={iFrameContent} />
+          <TargetImage image={challenge.image} />
+        </RightPane>
+      </Grid>
+      <Bottom>
+        <Title>
+          Challenge {challengeIndex + 1} of {challenges.length}:{' '}
+          {challenge.title}
+        </Title>
+        <ButtonGroup>
+          {challengeIndex > 0 && (
+            <Button onClick={goToPreviousChallenge}>Previous</Button>
+          )}
+          {challengeIndex < challenges.length - 1 && (
+            <Button onClick={goToNextChallenge}>Next</Button>
+          )}
+        </ButtonGroup>
+      </Bottom>
     </Container>
   )
+
+  function goToNextChallenge() {
+    setChallengeIndex(challengeIndex + 1)
+  }
+
+  function goToPreviousChallenge() {
+    setChallengeIndex(challengeIndex - 1)
+  }
 }
 
-const Container = styled.div`
+const Title = styled.h2`
+  margin: 0;
+  font-size: 1.2rem;
+`
+
+const ButtonGroup = styled.div`
   display: flex;
-  flex-direction: row;
+  gap: 1rem;
+`
+
+const Button = styled.button`
+  border: none;
+  background-color: #f7c4de;
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: #4c3c44;
+  font-weight: bold;
+  cursor: pointer;
+`
+
+const Bottom = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+`
+
+const Container = styled.div`
   background-color: lightsteelblue;
   height: 100vh;
+`
+
+const Grid = styled.div`
+  display: flex;
+  flex-direction: row;
 `
 
 const ResultIFrame = styled.iframe`
   background-color: white;
   border: none;
-  height: 40vh;
+  height: 37vh;
   margin: 20px;
   padding: 16px;
   border-radius: 6px;
@@ -80,6 +137,7 @@ export default App
 
 interface Challenge {
   id: string
+  title: string
   html: string
   css: string
   image: string

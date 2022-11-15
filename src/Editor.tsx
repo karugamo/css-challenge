@@ -1,5 +1,7 @@
 import MonacoEditor, {Monaco} from '@monaco-editor/react'
+import {useEffect, useRef} from 'react'
 import styled from 'styled-components'
+import {editor} from 'monaco-editor/esm/vs/editor/editor.api'
 
 interface EditorProps {
   language: string
@@ -15,11 +17,13 @@ export default function Editor({
   levelId,
 }: EditorProps) {
   const storageKey = `editor-${levelId}-${language}`
+  const editorRef = useRef<editor.IStandaloneCodeEditor>()
+  useLevelIdState()
 
   return (
     <Container>
       <MonacoEditor
-        height="40vh"
+        height="37vh"
         theme="vs-dark"
         loading=""
         options={{
@@ -38,7 +42,20 @@ export default function Editor({
     </Container>
   )
 
-  function handleEditorDidMount(editor: any) {
+  function useLevelIdState() {
+    useEffect(() => {
+      const value = localStorage.getItem(storageKey)
+      setValue(value ?? defaultValue)
+    }, [levelId])
+  }
+
+  function setValue(value: string) {
+    editorRef?.current?.setValue(value)
+    onChange(value)
+  }
+
+  function handleEditorDidMount(editor: editor.IStandaloneCodeEditor) {
+    editorRef.current = editor
     const storedValue = localStorage.getItem(storageKey)
     if (storedValue === null) return
     editor.setValue(storedValue || '')
