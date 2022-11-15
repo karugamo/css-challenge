@@ -1,7 +1,0 @@
-{
-    "id": "tweet-button",
-    "title": "Tweet Button",
-    "html": "<button>Tweet</button>",
-    "css": "button {\n}",
-    "image": "tweet-button.png"
-}

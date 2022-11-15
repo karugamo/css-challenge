@@ -2,11 +2,9 @@ import {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import Editor from './Editor'
 import TargetImage from './TargetImage'
+import _challenges from '../challenges.json'
 
-import twitter from '../challenges/twitter.json'
-import tags from '../challenges/tags.json'
-
-const challenges: Challenge[] = [twitter, tags]
+const challenges: Challenge[] = _challenges
 
 function App() {
   const [challengeIndex, setChallengeIndex] = useState<number>(0)

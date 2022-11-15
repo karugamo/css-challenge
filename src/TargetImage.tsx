@@ -9,8 +9,8 @@ export default function TargetImage({image}: {image: string}) {
 }
 
 const Image = styled.img`
-  height: 37vh;
-  width: 50%;
+  height: 100%;
+  width: 100%;
   object-fit: contain;
 `
 
